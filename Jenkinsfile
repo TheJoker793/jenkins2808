@@ -1,7 +1,7 @@
 pipeline {
     environment {
-        //DOCKERHUB_CREDENTIALS = credentials('DockerCredentialId')
-        DOCKERHUB_CREDENTIALS_ID = 'DockerCredentialId'
+        DOCKERHUB_CREDENTIALS = credentials('DockerCredentialId')
+        //DOCKERHUB_CREDENTIALS_ID = 'DockerCredentialId'
 
     }
     agent any
@@ -19,11 +19,10 @@ pipeline {
         }
         stage('Tag and push your image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS_ID, passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
                         bat 'docker tag jenkins3108 channoufi/projectjenkins:latest'
-                        bat "echo %DOCKERHUB_PASSWORD% | docker login -u %DOCKERHUB_USERNAME% --password-stdin"
-                        bat 'docker push channoufi/projectjenkins:latest'
-                    }
+                        //bat "echo %DOCKERHUB_PASSWORD% | docker login -u %DOCKERHUB_USERNAME% --password-stdin"
+                        //bat 'docker push channoufi/projectjenkins:latest'
+                    
             }
             post {
                 always {
