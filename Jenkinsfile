@@ -31,6 +31,9 @@ pipeline {
         stage('Run docker container') {
             steps {
                 script {
+                     // Remove the existing container if it exists
+                    bat 'docker ps -a -q --filter name=jen_container | findstr . && docker rm -f jen_container || echo "No existing container to remove"'
+                    // Run the new container
                     bat 'docker run -d --name jen_container -p 8089:80 jenkins3108:latest'
                 }
             }
