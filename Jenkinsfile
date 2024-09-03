@@ -1,8 +1,6 @@
 pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerCredentialId')
-        //DOCKERHUB_CREDENTIALS_ID = 'DockerCredentialId'
-
     }
     agent any
     stages {
@@ -14,16 +12,15 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo 'Building Docker image...'
-                bat 'docker build -t jenkins3108 .'
+                bat 'docker build -t jenkins3108:latest .'  // Ajout du tag latest ici
             }
         }
         stage('Tag and push your image') {
             steps {
-                        bat 'docker tag jenkins3108 channoufi/projectjenkins:latest'
-                        //bat "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
-                        bat "docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}"
-                        bat 'docker push channoufi/projectjenkins:latest'
-                    
+                bat 'docker images'  // Débogage: liste toutes les images disponibles
+                bat 'docker tag jenkins3108:latest channoufi/projectjenkins:latest'
+                bat "docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}"
+                bat 'docker push channoufi/projectjenkins:latest'
             }
             post {
                 always {
@@ -34,7 +31,7 @@ pipeline {
         stage('Run docker container') {
             steps {
                 script {
-                    bat 'docker run -d --name jen_container -p 8089:80 jenkins3108'
+                    bat 'docker run -d --name jen_container -p 8089:80 jenkins3108:latest'
                 }
             }
         }
