@@ -12,7 +12,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo 'Building Docker image...'
-                sh 'docker build -t jenkins3108:latest .'  // Ajout du tag latest ici
+                bat 'docker build -t jenkins3108:latest .'  // Ajout du tag latest ici
             }
         }
         stage('Tag and push your image') {
